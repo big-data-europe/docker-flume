@@ -1,1 +1,1 @@
-FLUME_CLASSPATH="/usr/local/apache-zookeeper/current/lib/*:/usr/local/apache-zookeeper/current/zookeeper-3.4.6.jar"
+FLUME_CLASSPATH="/usr/local/apache-zookeeper/current/lib/*:/usr/local/apache-zookeeper/current/zookeeper-3.4.6.jar:/usr/local/hadoop/current/share/hadoop/common/hadoop-common-2.7.1.jar:/usr/local/hadoop/current/share/hadoop/common/lib/*:/usr/local/hadoop/current/share/hadoop/hdfs/hadoop-hdfs-2.7.1.jar:/usr/local/hadoop/current/share/hadoop/hdfs/lib/*"

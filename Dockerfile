@@ -34,3 +34,5 @@ ENV ZK_HOME="/usr/local/apache-zookeeper/current"
 ADD flume-env.sh /usr/local/apache-flume/current/conf/
 
 RUN /bin/bash -c "source /usr/local/apache-flume/current/conf/flume-env.sh"
+
+EXPOSE 44444
