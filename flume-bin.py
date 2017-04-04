@@ -28,7 +28,6 @@ class FlumeBin:
 
         with open(flume_commands_file_name) as flume_commands_file:
             flume_commands = json.load(flume_commands_file,object_pairs_hook=collections.OrderedDict);
-            print(flume_commands);
             zkConnString = None; 
             zkBasePath = None;
             confFile = None;
@@ -46,23 +45,23 @@ class FlumeBin:
                     if option == "-f" or option == "--conf-file":
                         confFile = self.get_value(value);
 
-                print("zkConnString:%s" % zkConnString);
-                print("zkBasePath:%s" % zkBasePath);
-                print("confFile:%s" % confFile);
-                print("name:%s" % name);
                 if name == None:
                     raise Exception("missing required option 'agent name': [-n, --name]")
                 if confFile == None and zkConnString == None:
                     raise Exception("missing required option 'agent config file' if no zookeeper url specified: [-f, --conf-file]")
                 if zkConnString != None:
-                    with open(("%s/%s" % (self.flumeConfDir,name))) as flume_config:
-                        upload_call=[ "%s/zkCli.sh" % self.zkBinDir, '-server', zkConnString, 'create',("%s/%s" % ((zkBasePath if zkBasePath != None else ""),name)), ("%s" % flume_config.read()) ]
-                        print(upload_call)
-                        exit_code = sp.call(upload_call, stdout = sp.PIPE, stderr=dev_null, close_fds=True)
+                    with open(("%s/%s" % (self.flumeConfDir,name)),'r+') as flume_config:
+                        if zkBasePath != None:                               
+                          create_chroot=[ ("%s/zkCli.sh" % self.zkBinDir), "-server", zkConnString, "create", zkBasePath ]
+                          exit_code = sp.call(create_chroot, stdout=dev_null, stderr=dev_null, close_fds=True)
+
+                        upload_call=[ ("%s/zkCli.sh" % self.zkBinDir), "-server", zkConnString, "create",("%s/%s" % ((zkBasePath if zkBasePath != None else ""),name)), ("%s" % flume_config.read().rstrip('\n')) ];
+                        exit_code = sp.call(upload_call, stderr=dev_null, close_fds=True)
                         pass
                     
                 command_call=[]
                 [command_call.extend([k,self.get_value(v)]) for k,v in command.items()]
+                command_call = [var for var in command_call if var]
                 if command_call[0] == "bash":
                     exit_code = sp.call(command_call, stdout = sp.PIPE, stderr=dev_null,close_fds=True)
                 else:
