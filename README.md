@@ -1,7 +1,7 @@
 # Flume Docker
 
 Versions used in this docker image:
-* Flume Version: 1.6.0
+* Flume Version: apache-flume-1.7.0-SNAPSHOT-bin.tar.gz
 * Zookeeper Version: 3.5.2-alpha
 * Java 1.8.0_72
  
